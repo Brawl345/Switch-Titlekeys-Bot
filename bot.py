@@ -22,49 +22,49 @@ logger = logging.getLogger(__name__)
 # Bot configuration
 config = ConfigParser()
 try:
-    config.read_file(open('config.ini'))
+    config.read_file(open("config.ini"))
 except FileNotFoundError:
-    logger.critical('config.ini not found!')
+    logger.critical("config.ini not found!")
     sys.exit(1)
 
 # Bot token
 try:
-    bot_token = config['DEFAULT']['token']
+    bot_token = config["DEFAULT"]["token"]
 except KeyError:
-    logger.error('No bot token, please check config.ini!')
+    logger.error("No bot token, please check config.ini!")
     sys.exit(1)
 if not bot_token:
-    logger.error('No bot token, please check config.ini!')
+    logger.error("No bot token, please check config.ini!")
     sys.exit(1)
 
 # DB URL
 try:
-    db_url = config['DEFAULT']['db_url']
+    db_url = config["DEFAULT"]["db_url"]
 except KeyError:
-    logger.error('No database URL, please check config.ini!')
+    logger.error("No database URL, please check config.ini!")
     sys.exit(1)
 if not db_url:
-    logger.error('No database URL, please check config.ini!')
+    logger.error("No database URL, please check config.ini!")
     sys.exit(1)
 
 # Channels
 try:
     channels = loads(config["DEFAULT"]["channels"])
 except KeyError:
-    logger.error('No channel IDs, please check config.ini!')
+    logger.error("No channel IDs, please check config.ini!")
     sys.exit(1)
 if not channels:
-    logger.error('No channel IDs, please check config.ini!')
+    logger.error("No channel IDs, please check config.ini!")
     sys.exit(1)
 
 for channel in channels:
     if not isinstance(channel, int):
-        logger.error('Channel IDs must be integeres!')
+        logger.error("Channel IDs must be integeres!")
         sys.exit(1)
 
 
 def save_database(newdb):
-    with open('titlekeys.txt', 'w', encoding="utf8") as file:
+    with open("titlekeys.txt", "w", encoding="utf8") as file:
         for line in newdb:
             if line.strip():
                 file.write(line.strip() + "\n")
@@ -126,7 +126,7 @@ def update_titlekeys(bot):
 
 
 def run_job(bot, job):
-    logger.info('================================')
+    logger.info("================================")
     update_titlekeys(bot)
 
 
@@ -141,7 +141,7 @@ def main():
     try:
         bot_info = updater.bot.getMe()
     except telegram.error.Unauthorized:
-        logger.error('Login failed, wrong bot token?')
+        logger.error("Login failed, wrong bot token?")
         sys.exit(1)
 
     logger.info("Welcome {0}, AKA @{1} ({2})".format(
@@ -151,7 +151,7 @@ def main():
     ))
 
     # Hide "Error while getting Updates" because it's not our fault
-    updater.logger.addFilter((lambda log: not log.msg.startswith('Error while getting Updates:')))
+    updater.logger.addFilter((lambda log: not log.msg.startswith("Error while getting Updates:")))
 
     # Fix for Python <= 3.5
     updater.dispatcher.add_error_handler(onerror)
@@ -172,5 +172,5 @@ def main():
     updater.idle()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
