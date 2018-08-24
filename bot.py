@@ -170,7 +170,7 @@ def main():
     updater.job_queue.run_repeating(
         run_job,
         interval=3600.0,  # 1 hour
-        first=1.0
+        first=10.0
     )
 
     # Start this thing!
