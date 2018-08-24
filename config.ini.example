@@ -1,5 +1,6 @@
 [DEFAULT]
 token = 1337:1234567890abcdefgh
 db_url = https://example.com
+db_url_m = http://directip.example.com
 # Must be integers!
 channels = [1337]

@@ -46,6 +46,11 @@ except KeyError:
 if not db_url:
     logger.error("No database URL, please check config.ini!")
     sys.exit(1)
+    
+try:
+    db_url_m = config["DEFAULT"]["db_url_m"]
+except KeyError:
+    db_url_m = None
 
 # Channels
 try:
@@ -76,8 +81,15 @@ def update_titlekeys(bot):
     logger.info("Downloading new database...")
     req = get(db_url, allow_redirects=True)
     if req.status_code != 200:
-        logger.error("Database URL returned HTTP Error {0}".format(req.status_code))
-        return
+        if db_url_m:
+            logger.error("Database URL returned HTTP Error {0}, trying mirror...".format(req.status_code))
+            req = get(db_url_m, allow_redirects=True)
+            if req.status_code != 200:
+                logger.error("Database Mirror URL returned HTTP Error {0}".format(req.status_code))
+                return
+        else:
+            logger.error("Database URL returned HTTP Error {0}".format(req.status_code))
+            return
     req.encoding = "utf-8"
     newdb = req.text.split("\n")
     if newdb[-1] == "":
@@ -158,7 +170,7 @@ def main():
     updater.job_queue.run_repeating(
         run_job,
         interval=3600.0,  # 1 hour
-        first=10.0
+        first=1.0
     )
 
     # Start this thing!
