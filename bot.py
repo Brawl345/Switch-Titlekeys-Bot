@@ -82,7 +82,7 @@ def update_titlekeys(bot):
     req = get(db_url, allow_redirects=True)
     if req.status_code != 200:
         if db_url_m:
-            logger.error("Database URL returned HTTP Error {0}, trying mirror...".format(req.status_code))
+            logger.warning("Database URL returned HTTP Error {0}, trying mirror...".format(req.status_code))
             req = get(db_url_m, allow_redirects=True)
             if req.status_code != 200:
                 logger.error("Database Mirror URL returned HTTP Error {0}".format(req.status_code))
